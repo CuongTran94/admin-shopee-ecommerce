@@ -1,11 +1,11 @@
-import request from '@/utils/request';
+import { firestore, auth } from '../../config/firebase';
+import _ from 'lodash';
 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
-    method: 'POST',
-    data: params,
-  });
-}
-export async function getFakeCaptcha(mobile) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
+export async function signIn(params) {
+  try {
+    const { user } = await auth.signInWithEmailAndPassword(params.userName, params.password);
+    return _.extend(user, { status: 'ok', type: params.type });
+  } catch (err) {
+    throw err;
+  }
 }

@@ -87,6 +87,7 @@ const BasicLayout = props => {
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
     authority: undefined,
   };
+
   const { formatMessage } = useIntl();
   return (
     <ProLayout

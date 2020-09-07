@@ -20,7 +20,7 @@ const LoginMessage = ({ content }) => (
 
 const Login = props => {
   const { userLogin = {}, submitting } = props;
-  const { status, type: loginType } = userLogin;
+  const { status, type: loginType, authErr } = userLogin;
   const [autoLogin, setAutoLogin] = useState(true);
   const [type, setType] = useState('account');
 
@@ -36,8 +36,8 @@ const Login = props => {
     <div className={styles.main}>
       <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
         <Tab key="account" tab="Account">
-          {status === 'error' && loginType === 'account' && !submitting && (
-            <LoginMessage content="The username or password is incorrect" />
+          {status === 'error' && authErr && !submitting && (
+            <LoginMessage content={authErr} />
           )}
 
           <UserName
@@ -62,7 +62,7 @@ const Login = props => {
           />
         </Tab>
         <Tab key="mobile" tab="Mobile">
-          {status === 'error' && loginType === 'mobile' && !submitting && (
+          {status === 'error' && authErr && !submitting && (
             <LoginMessage content="Verification code error" />
           )}
           <Mobile

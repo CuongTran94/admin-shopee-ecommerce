@@ -42,7 +42,7 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          authority: ['admin'],
           routes: [
             {
               path: '/',
@@ -53,6 +53,7 @@ export default defineConfig({
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
+              authority: ['admin'],
             },
             {
               path: '/admin',
@@ -80,30 +81,35 @@ export default defineConfig({
               icon: 'table',
               path: '/category',
               component: './Category',
+              authority: ['admin'],
             },
             {
               name: 'list.product',
               icon: 'profile',
               path: '/product',
               component: './Product',
+              authority: ['admin'],
               routes: [
                 {
                   name: 'published',
                   icon: 'table',
                   path: '/product/published',
                   component: './Product/components/ListProduct',
+                  authority: ['admin'],
                 },
                 {
                   name: 'unpublished',
                   icon: 'table',
                   path: '/product/unpublished',
                   component: './Product/components/ListProduct',
+                  authority: ['admin'],
                 },
                 {
                   name: 'create',
                   icon: 'table',
                   path: '/product/create',
                   component: './Product/components/CreateForm',
+                  authority: ['admin'],
                 },
               ],
             },
@@ -112,6 +118,7 @@ export default defineConfig({
               icon: 'smile',
               path: '/slider',
               component: './Slider',
+              authority: ['admin'],
             },
             {
               component: './404',
