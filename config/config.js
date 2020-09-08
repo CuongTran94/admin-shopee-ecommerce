@@ -55,22 +55,22 @@ export default defineConfig({
               component: './Welcome',
               authority: ['admin'],
             },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              authority: ['admin'],
-              routes: [
-                {
-                  path: '/admin/sub-page',
-                  name: 'sub-page',
-                  icon: 'smile',
-                  component: './Welcome',
-                  authority: ['admin'],
-                },
-              ],
-            }, // {
+            // {
+            //   path: '/admin',
+            //   name: 'admin',
+            //   icon: 'crown',
+            //   component: './Admin',
+            //   authority: ['admin'],
+            //   routes: [
+            //     {
+            //       path: '/admin/sub-page',
+            //       name: 'sub-page',
+            //       icon: 'smile',
+            //       component: './Welcome',
+            //       authority: ['admin'],
+            //     },
+            //   ],
+            // }, {
             //   name: 'list.smile',
             //   icon: 'smile',
             //   path: '/listtablelist',
@@ -118,6 +118,13 @@ export default defineConfig({
               icon: 'smile',
               path: '/slider',
               component: './Slider',
+              authority: ['admin'],
+            },
+            {
+              name: 'list.transaction',
+              icon: 'crown',
+              path: '/transaction',
+              component: './Transaction',
               authority: ['admin'],
             },
             {
