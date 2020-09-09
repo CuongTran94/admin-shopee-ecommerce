@@ -32,6 +32,7 @@ export default {
   'menu.list.product.create': 'Create',
   'menu.list.slider': 'Slider',
   'menu.list.transaction': 'Transaction',
+  'menu.list.order': 'Order',
   ///
   'menu.list.table-list': 'Search Table',
   'menu.list.basic-list': 'Basic List',

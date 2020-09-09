@@ -5,7 +5,7 @@ import UpdateProductForm from '../UpdateForm';
 import noImage from '@/assets/no-image.png';
 import { connect } from 'umi';
 
-const ListProduct = props => {
+const ListProduct = (props) => {
   const [formValues, setFormValues] = useState({});
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const { dispatch, route, listProduct, loading } = props;
@@ -13,7 +13,7 @@ const ListProduct = props => {
   useEffect(() => {
     dispatch({
       type: 'product/fetch',
-      payload: { status: route.name === "published" ? true : false }
+      payload: { status: route.name === 'published' ? true : false },
     });
   }, []);
 
@@ -32,21 +32,20 @@ const ListProduct = props => {
           callback: () => {
             dispatch({
               type: 'product/fetch',
-              payload: { status: route.name === "published" ? true : false }
+              payload: { status: route.name === 'published' ? true : false },
             });
-          }
+          },
         });
-      }
-    })
-
-  }
+      },
+    });
+  };
 
   const columns = [
     {
       title: 'Image',
       dataIndex: 'pro_avatar',
       key: 'pro_avatar',
-      render: text => <img src={text ? text : noImage} style={{ width: 80, height: 80 }} />,
+      render: (text) => <img src={text ? text : noImage} style={{ width: 80, height: 80 }} />,
       width: 150,
     },
     {
@@ -71,25 +70,27 @@ const ListProduct = props => {
       title: 'Status',
       dataIndex: 'pro_active',
       key: 'pro_active',
-      render: value => {
+      render: (value) => {
         return value ? (
           <>
-            <Tag key={value} color="success">Show</Tag>
+            <Tag key={value} color="success">
+              Show
+            </Tag>
           </>
         ) : (
-            <>
-              <Tag key={value} color="default">Hide</Tag>
-            </>
-          )
-      }
+          <>
+            <Tag key={value} color="default">
+              Hide
+            </Tag>
+          </>
+        );
+      },
     },
     {
       title: 'Created',
       dataIndex: 'createdAt',
       key: 'createdAt',
-      render: date => (
-        <div>{new Date(date.seconds * 1000).toLocaleDateString("en-US")}</div>
-      )
+      render: (date) => <div>{new Date(date.seconds * 1000).toLocaleDateString('en-US')}</div>,
     },
     {
       title: 'Action',
@@ -114,10 +115,12 @@ const ListProduct = props => {
             shape="round"
             danger
             onClick={() => handleDelete(record)}
-          >Delete</Button>
+          >
+            Delete
+          </Button>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -139,7 +142,7 @@ const ListProduct = props => {
       </div>
     </div>
   );
-}
+};
 
 export default connect(({ product, loading }) => ({
   listProduct: product.listProduct,

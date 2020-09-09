@@ -22,7 +22,6 @@ export default defineConfig({
   targets: {
     ie: 11,
   },
-  // umi routes: https://umijs.org/docs/routing
   routes: [
     {
       path: '/user',
@@ -55,27 +54,6 @@ export default defineConfig({
               component: './Welcome',
               authority: ['admin'],
             },
-            // {
-            //   path: '/admin',
-            //   name: 'admin',
-            //   icon: 'crown',
-            //   component: './Admin',
-            //   authority: ['admin'],
-            //   routes: [
-            //     {
-            //       path: '/admin/sub-page',
-            //       name: 'sub-page',
-            //       icon: 'smile',
-            //       component: './Welcome',
-            //       authority: ['admin'],
-            //     },
-            //   ],
-            // }, {
-            //   name: 'list.smile',
-            //   icon: 'smile',
-            //   path: '/listtablelist',
-            //   component: './ListTableListTwo',
-            // },
             {
               name: 'list.category',
               icon: 'table',
@@ -114,6 +92,13 @@ export default defineConfig({
               ],
             },
             {
+              name: 'list.order',
+              icon: 'profile',
+              path: '/order',
+              component: './Order',
+              authority: ['admin'],
+            },
+            {
               name: 'list.slider',
               icon: 'smile',
               path: '/slider',
@@ -141,7 +126,6 @@ export default defineConfig({
       component: './404',
     },
   ],
-  // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
     // ...darkTheme,
     'primary-color': defaultSettings.primaryColor,
