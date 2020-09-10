@@ -22,9 +22,13 @@ export async function fetchCategory(params) {
     throw err;
   }
 }
-export async function removeCategory(id) {
+export async function removeCategory(payload) {
   try {
-    await firestore.collection('categories').doc(id).delete();
+    await firestore.collection('categories').doc(payload.id).delete();
+    if (payload.image) {
+      await storage.refFromURL(payload.image).delete();
+    }
+
     return true;
   } catch (err) {
     throw err;
