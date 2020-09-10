@@ -45,7 +45,6 @@ const Product = props => {
 
   const handleFormSubmit = value => {
     // eslint-disable-next-line no-console
-    console.log(value);
   };
 
   const getTabKey = () => {

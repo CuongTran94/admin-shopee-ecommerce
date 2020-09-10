@@ -10,7 +10,7 @@ import { connect } from 'umi';
 import { extend } from 'lodash';
 import { useEffect } from 'react';
 
-const Slider = props => {
+const Slider = (props) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [stepFormValues, setStepFormValues] = useState({});
@@ -23,7 +23,7 @@ const Slider = props => {
 
   useEffect(() => {
     dispatch({
-      type: 'slider/fetch'
+      type: 'slider/fetch',
     });
   }, []);
 
@@ -56,30 +56,29 @@ const Slider = props => {
                 >
                   {uploading ? 'Uploading' : 'Start Upload'}
                 </Button>
-              </>) : (
-                <>
-                  <div style={{
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
                     width: 200,
                     height: 100,
                     border: '1px solid #d9d9d9',
                     borderRadius: '3px',
-                    padding: '8px'
-                  }}>
-                    <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
-                  </div>
-                  <Button
-                    type="primary"
-                    loading={uploading}
-                    style={{ marginTop: 16 }}
-                    danger
-                  >
-                    {uploading ? 'Removing' : 'Remove'}
-                  </Button>
-                </>)}
+                    padding: '8px',
+                  }}
+                >
+                  <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
+                </div>
+                <Button type="primary" loading={uploading} style={{ marginTop: 16 }} danger>
+                  {uploading ? 'Removing' : 'Remove'}
+                </Button>
+              </>
+            )}
           </>
         );
       },
-      render: (val, entity) => <img src={val} alt={val} style={{ width: 200, height: 100 }} />
+      render: (val, entity) => <img src={val} alt={val} style={{ width: 200, height: 100 }} />,
     },
     {
       title: 'Link',
@@ -89,7 +88,7 @@ const Slider = props => {
       hideInSearch: true,
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return <Input {...rest} placeholder="#" />;
-      }
+      },
     },
     {
       title: 'Title',
@@ -98,7 +97,7 @@ const Slider = props => {
       hideInSearch: true,
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return <Input {...rest} placeholder="Title" />;
-      }
+      },
     },
     {
       title: 'Order',
@@ -107,7 +106,7 @@ const Slider = props => {
       hideInSearch: true,
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return <InputNumber style={{ width: '100%' }} {...rest} min={0} />;
-      }
+      },
     },
     {
       title: 'Status',
@@ -131,7 +130,7 @@ const Slider = props => {
             <Select.Option value={true}>Show</Select.Option>
           </Select>
         );
-      }
+      },
     },
     {
       title: 'Created At',
@@ -183,7 +182,7 @@ const Slider = props => {
     dispatch({
       type: 'slider/handleUpload',
       payload: fileList[0],
-      callback: res => {
+      callback: (res) => {
         if (res) {
           setImage(res);
           setFileList([]);
@@ -192,14 +191,14 @@ const Slider = props => {
           setImage('');
           setUploading(false);
         }
-      }
+      },
     });
   };
 
-  const handleAdd = fields => {
+  const handleAdd = (fields) => {
     const params = extend(fields, {
-      createdAt: new Date,
-      image: image
+      createdAt: new Date(),
+      image: image,
     });
 
     dispatch({
@@ -207,15 +206,15 @@ const Slider = props => {
       payload: params,
       callback: () => {
         dispatch({
-          type: 'slider/fetch'
+          type: 'slider/fetch',
         });
         setImage('');
         handleModalVisible(false);
-      }
+      },
     });
-  }
+  };
 
-  const handleUpdate = fields => {
+  const handleUpdate = (fields) => {
     if (!fields) return true;
 
     dispatch({
@@ -223,18 +222,18 @@ const Slider = props => {
       payload: extend(fields, {
         id: stepFormValues.id,
         image: image,
-        createdAt: new Date
+        createdAt: new Date(),
       }),
       callback: () => {
         dispatch({
-          type: 'slider/fetch'
+          type: 'slider/fetch',
         });
         setImage('');
         handleModalVisible(false);
         setStepFormValues({});
-      }
+      },
     });
-  }
+  };
 
   const handleRemove = (selectedRows) => {
     if (!selectedRows) return true;
@@ -250,13 +249,13 @@ const Slider = props => {
           payload: { id: selectedRows.id, url: selectedRows.image },
           callback: () => {
             dispatch({
-              type: 'slider/fetch'
+              type: 'slider/fetch',
             });
-          }
+          },
         });
-      }
+      },
     });
-  }
+  };
 
   return (
     <PageContainer>
@@ -271,14 +270,14 @@ const Slider = props => {
         ]}
         pagination={{
           defaultPageSize: 10,
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
         }}
         search={false}
         options={{
           fullScreen: false,
           density: false,
           reload: true,
-          setting: false
+          setting: false,
         }}
         dataSource={listSlider}
         columns={columns}
@@ -287,13 +286,18 @@ const Slider = props => {
         }}
       />
 
-      <CreateForm onCancel={() => {
-        handleModalVisible(false);
-        setFileList([]);
-        setImage('');
-      }} modalVisible={createModalVisible}>
+      <CreateForm
+        onCancel={() => {
+          handleModalVisible(false);
+          setFileList([]);
+          setImage('');
+        }}
+        modalVisible={createModalVisible}
+      >
         <ProTable
-          onSubmit={value => handleAdd(value)}
+          onSubmit={(value) => {
+            handleAdd(value);
+          }}
           search={{
             submitText: 'Submit',
             resetText: 'Reset',
@@ -320,10 +324,10 @@ const Slider = props => {
                 link: stepFormValues.link,
                 title: stepFormValues.title,
                 order: stepFormValues.order,
-                status: stepFormValues.status
-              }
+                status: stepFormValues.status,
+              },
             }}
-            onSubmit={value => handleUpdate(value)}
+            onSubmit={(value) => handleUpdate(value)}
             search={{
               submitText: 'Save',
               resetText: 'Reset',
@@ -340,5 +344,5 @@ const Slider = props => {
 };
 
 export default connect(({ slider }) => ({
-  listSlider: slider.listSlider
+  listSlider: slider.listSlider,
 }))(Slider);

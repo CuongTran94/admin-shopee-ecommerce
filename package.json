@@ -48,7 +48,7 @@
     "@ant-design/icons": "^4.0.0",
     "@ant-design/pro-descriptions": "^1.0.10",
     "@ant-design/pro-layout": "^6.4.1",
-    "@ant-design/pro-table": "^2.5.3",
+    "@ant-design/pro-table": "^2.5.10",
     "@tinymce/tinymce-react": "^3.6.0",
     "antd": "^4.5.3",
     "antd-img-crop": "^3.10.0",
