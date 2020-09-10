@@ -22,6 +22,7 @@ const CategoryModel = {
     },
     *handleSubmitCate({ payload }, { call, put }) {
       const hide = message.loading('Adding');
+
       const response = yield call(addCategory, payload);
       if (response) {
         hide();

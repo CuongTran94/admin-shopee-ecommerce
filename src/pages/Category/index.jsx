@@ -297,7 +297,10 @@ const Category = (props) => {
 
   const handleRemove = (selectedRows) => {
     if (!selectedRows) return true;
-
+    const newPayload = {
+      id: selectedRows.id,
+      image: selectedRows.c_image,
+    };
     Modal.confirm({
       title: `Are you sure you want to delete the selected category (${selectedRows.c_name})?`,
       content: 'Once deleted, the data cannot be recovered',
@@ -306,7 +309,7 @@ const Category = (props) => {
       onOk: () => {
         dispatch({
           type: 'category/handleDelCate',
-          payload: selectedRows.id,
+          payload: newPayload,
           callback: () => {
             dispatch({
               type: 'category/fetch',
