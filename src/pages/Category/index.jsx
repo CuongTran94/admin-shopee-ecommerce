@@ -1,5 +1,15 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, message, Input, InputNumber, Select, TreeSelect, Modal } from 'antd';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  Upload,
+  Button,
+  Divider,
+  message,
+  Input,
+  InputNumber,
+  Select,
+  TreeSelect,
+  Modal,
+} from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
@@ -20,20 +30,23 @@ const formLayout = {
   },
 };
 
-const Category = props => {
+const Category = (props) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
   const { dispatch, listCate, loading } = props;
+  const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState('');
+  const [fileList, setFileList] = useState([]);
 
   const getCategoryByParent = (pId = 'root') => {
-    const result = listCate.filter(item => item.c_parentId === pId);
+    const result = listCate.filter((item) => item.c_parentId === pId);
 
     let treeData = [];
     let count = 0;
-    result.forEach(item => {
+    result.forEach((item) => {
       let category = {};
 
       category['title'] = item.c_name;
@@ -42,15 +55,64 @@ const Category = props => {
       treeData[count++] = category;
     });
     return treeData;
-  }
+  };
 
   useEffect(() => {
     dispatch({
-      type: 'category/fetch'
-    })
+      type: 'category/fetch',
+    });
   }, []);
 
+  const beforeUpload = (file) => {
+    setFileList([file]);
+  };
+
   const columns = [
+    {
+      title: 'Image',
+      dataIndex: 'c_image',
+      name: 'Image',
+      hideInTable: true,
+      hideInSearch: true,
+      renderFormItem: () => {
+        return (
+          <>
+            {!image ? (
+              <>
+                <Upload beforeUpload={beforeUpload}>
+                  {fileList.length < 1 && <Button icon={<UploadOutlined />}>Select File</Button>}
+                </Upload>
+                <Button
+                  onClick={handleUpload}
+                  type="primary"
+                  loading={uploading}
+                  style={{ marginTop: 16 }}
+                >
+                  {uploading ? 'Uploading' : 'Start Upload'}
+                </Button>
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    width: 200,
+                    height: 100,
+                    border: '1px solid #d9d9d9',
+                    borderRadius: '3px',
+                    padding: '8px',
+                  }}
+                >
+                  <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
+                </div>
+                <Button type="primary" loading={uploading} style={{ marginTop: 16 }} danger>
+                  {uploading ? 'Removing' : 'Remove'}
+                </Button>
+              </>
+            )}
+          </>
+        );
+      },
+    },
     {
       title: 'Name',
       dataIndex: 'c_name',
@@ -63,7 +125,7 @@ const Category = props => {
       ],
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return <Input {...rest} placeholder="Name" />;
-      }
+      },
     },
     {
       title: 'Parent',
@@ -80,20 +142,19 @@ const Category = props => {
             placeholder="Please select"
             allowClear
             treeDefaultExpandAll
-          >
-          </TreeSelect>
-        )
+          ></TreeSelect>
+        );
       },
       renderText: (val) => {
-        const cate = listCate.find(item => item.id === val);
+        const cate = listCate.find((item) => item.id === val);
         return cate ? cate.c_name : 'N/A';
-      }
+      },
     },
     {
       title: 'Slug',
       dataIndex: 'c_slug',
       hideInForm: true,
-      hideInSearch: true
+      hideInSearch: true,
     },
     {
       title: 'Order',
@@ -104,7 +165,7 @@ const Category = props => {
       hideInTable: true,
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return <InputNumber style={{ width: '100%' }} {...rest} min={0} />;
-      }
+      },
     },
     {
       title: 'Description',
@@ -113,8 +174,10 @@ const Category = props => {
       hideInTable: true,
       hideInSearch: true,
       renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        return <TextArea {...rest} placeholder="Description" autoSize={{ minRows: 2, maxRows: 6 }} />;
-      }
+        return (
+          <TextArea {...rest} placeholder="Description" autoSize={{ minRows: 2, maxRows: 6 }} />
+        );
+      },
     },
     {
       title: 'Status',
@@ -138,14 +201,14 @@ const Category = props => {
             <Select.Option value={true}>Show</Select.Option>
           </Select>
         );
-      }
+      },
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
       valueType: 'dateTime',
       hideInForm: true,
-      hideInSearch: true
+      hideInSearch: true,
     },
     {
       title: 'Action',
@@ -181,20 +244,43 @@ const Category = props => {
     },
   ];
 
-  const handleAdd = fields => {
+  const handleUpload = () => {
+    setUploading(true);
     dispatch({
-      type: 'category/handleSubmitCate',
-      payload: fields
+      type: 'category/handleUpload',
+      payload: fileList[0],
+      callback: (res) => {
+        if (res) {
+          setImage(res);
+          setFileList([]);
+          setUploading(false);
+        } else {
+          setImage('');
+          setUploading(false);
+        }
+      },
+    });
+  };
+
+  const handleAdd = (fields) => {
+    const params = extend(fields, {
+      createdAt: new Date(),
+      image: image,
     });
 
     dispatch({
-      type: 'category/fetch'
+      type: 'category/handleSubmitCate',
+      payload: params,
+    });
+
+    dispatch({
+      type: 'category/fetch',
     });
 
     return true;
   };
 
-  const handleUpdate = fields => {
+  const handleUpdate = (fields) => {
     if (!fields) return true;
 
     dispatch({
@@ -202,14 +288,14 @@ const Category = props => {
       payload: extend(fields, { id: stepFormValues.id }),
       callback: () => {
         dispatch({
-          type: 'category/fetch'
+          type: 'category/fetch',
         });
-      }
+      },
     });
     return true;
   };
 
-  const handleRemove = selectedRows => {
+  const handleRemove = (selectedRows) => {
     if (!selectedRows) return true;
 
     Modal.confirm({
@@ -223,13 +309,12 @@ const Category = props => {
           payload: selectedRows.id,
           callback: () => {
             dispatch({
-              type: 'category/fetch'
+              type: 'category/fetch',
             });
-          }
+          },
         });
-      }
+      },
     });
-
   };
 
   return (
@@ -247,7 +332,7 @@ const Category = props => {
         pagination={{
           defaultPageSize: 20,
           simple: true,
-          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
+          showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
         }}
         search={{
           searchText: 'Search',
@@ -257,7 +342,7 @@ const Category = props => {
           fullScreen: false,
           density: false,
           reload: true,
-          setting: false
+          setting: false,
         }}
         dataSource={listCate}
         columns={columns}
@@ -269,9 +354,8 @@ const Category = props => {
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
         <ProTable
           form={{ layout: 'vertical' }}
-          onSubmit={async value => {
+          onSubmit={async (value) => {
             const success = await handleAdd(value);
-
             if (success) {
               handleModalVisible(false);
 
@@ -308,10 +392,10 @@ const Category = props => {
                 parent: stepFormValues.c_parentId,
                 order: stepFormValues.c_order,
                 description: stepFormValues.c_description,
-                status: stepFormValues.c_status
-              }
+                status: stepFormValues.c_status,
+              },
             }}
-            onSubmit={async value => {
+            onSubmit={async (value) => {
               const success = await handleUpdate(value);
 
               if (success) {

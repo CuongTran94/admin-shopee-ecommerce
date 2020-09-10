@@ -65,7 +65,6 @@ const SliderModel = {
   },
   reducers: {
     getSlider(state, action) {
-      console.log('hello');
       return {
         ...state,
         listSlider: action.payload || [],
