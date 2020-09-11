@@ -74,7 +74,7 @@ const Category = (props) => {
       name: 'Image',
       hideInTable: true,
       hideInSearch: true,
-      renderFormItem: () => {
+      renderFormItem: (item, { defaultRender, ...rest }, form) => {
         return (
           <>
             {!image ? (
@@ -223,6 +223,7 @@ const Category = (props) => {
             onClick={() => {
               handleUpdateModalVisible(true);
               setStepFormValues(record);
+              setImage(record.c_image);
             }}
           >
             Edit
@@ -271,6 +272,12 @@ const Category = (props) => {
     dispatch({
       type: 'category/handleSubmitCate',
       payload: params,
+      callback: () => {
+        dispatch({
+          type: 'category/fetch',
+        });
+        setImage('');
+      },
     });
 
     dispatch({
@@ -328,7 +335,13 @@ const Category = (props) => {
         rowKey="id"
         loading={loading}
         toolBarRender={() => [
-          <Button type="primary" onClick={() => handleModalVisible(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleModalVisible(true);
+              setImage('');
+            }}
+          >
             <PlusOutlined /> Create Category
           </Button>,
         ]}
