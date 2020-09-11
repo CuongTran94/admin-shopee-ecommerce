@@ -20,7 +20,7 @@ const CategoryModel = {
         payload: response,
       });
     },
-    *handleSubmitCate({ payload }, { call, put }) {
+    *handleSubmitCate({ payload, callback }, { call, put }) {
       const hide = message.loading('Adding');
 
       const response = yield call(addCategory, payload);
@@ -30,6 +30,7 @@ const CategoryModel = {
       } else {
         message.error('Added failed');
       }
+      if (callback) callback();
     },
     *handleUpdateCate({ payload, callback }, { call, put }) {
       const hide = message.loading('Updating');
