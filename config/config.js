@@ -106,6 +106,36 @@ export default defineConfig({
               authority: ['admin'],
             },
             {
+              name: 'list.blog',
+              icon: 'dashboard',
+              path: '/blog',
+              component: './Blog',
+              authority: ['admin'],
+              routes: [
+                {
+                  name: 'create',
+                  icon: 'table',
+                  path: '/blog/create',
+                  component: './Blog/components/CreateForm',
+                  authority: ['admin'],
+                },
+                {
+                  name: 'list',
+                  icon: 'table',
+                  path: '/blog/list',
+                  component: './Blog/components/List',
+                  authority: ['admin'],
+                },
+                {
+                  icon: 'table',
+                  path: '/blog/update/:slug',
+                  component: './Blog/components/CreateForm',
+                  authority: ['admin'],
+                },
+              ],
+            },
+
+            {
               name: 'list.transaction',
               icon: 'crown',
               path: '/transaction',

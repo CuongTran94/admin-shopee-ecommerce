@@ -9,7 +9,7 @@ import {
   Button,
   Card,
   InputNumber,
-  Upload
+  Upload,
 } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
@@ -22,7 +22,6 @@ import { connect } from 'umi';
 import { useEffect, useRef } from 'react';
 import { to_slug } from '@/utils/utils';
 import { extend } from 'lodash';
-
 
 const formItemLayout = {
   labelCol: {
@@ -59,7 +58,7 @@ const getBase64 = (img, callback) => {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
-}
+};
 
 const CreateProductForm = (props) => {
   const [form] = Form.useForm();
@@ -83,18 +82,18 @@ const CreateProductForm = (props) => {
       setImage(file);
     }
     return isJpgOrPng && isLt2M;
-  }
+  };
 
   useEffect(() => {
     if (values) {
       setImgUrl(values.pro_avatar);
     }
     dispatch({
-      type: 'category/fetch'
-    })
+      type: 'category/fetch',
+    });
   }, []);
 
-  const handleEditorChange = val => {
+  const handleEditorChange = (val) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -102,28 +101,29 @@ const CreateProductForm = (props) => {
     timeoutRef.current = setTimeout(() => {
       setContent(val);
     }, 400);
-  }
+  };
 
   const handleUpload = () => {
-    dispatch({
-      type: 'product/handleUpload',
-      payload: image,
-      callback: res => {
-        if (res) {
-          setImgUrl(res);
-        } else {
-          setImgUrl('');
-        }
-      }
-    });
-  }
+    // dispatch({
+    //   type: 'product/handleUpload',
+    //   payload: image,
+    //   callback: (res) => {
+    //     if (res) {
+    //       setImgUrl(res);
+    //     } else {
+    //       setImgUrl('');
+    //     }
+    //   },
+    // });
+    console.log(image, 'image');
+  };
 
   const getCategoryByParent = (pId = 'root') => {
-    const result = listCate.filter(item => item.c_parentId === pId);
+    const result = listCate.filter((item) => item.c_parentId === pId);
 
     let treeData = [];
     let count = 0;
-    result.forEach(item => {
+    result.forEach((item) => {
       let category = {};
 
       category['title'] = item.c_name;
@@ -132,13 +132,13 @@ const CreateProductForm = (props) => {
       treeData[count++] = category;
     });
     return treeData;
-  }
+  };
 
   const handleResetForm = () => {
     form.resetFields();
-  }
+  };
 
-  const onFinish = items => {
+  const onFinish = (items) => {
     if (items) {
       let params = {
         pro_name: items.name,
@@ -151,7 +151,7 @@ const CreateProductForm = (props) => {
         pro_description: content,
         pro_category_id: items.category,
         pro_avatar: imgUrl,
-        createdAt: new Date
+        createdAt: new Date(),
       };
       if (!edit && !Object.keys(values).length) {
         dispatch({
@@ -162,36 +162,32 @@ const CreateProductForm = (props) => {
             setImage(null);
             setImgUrl('');
             setContent('');
-          }
+          },
         });
       } else {
         dispatch({
           type: 'product/handleUpdate',
-          payload: extend(params, { id: values.key })
+          payload: extend(params, { id: values.key }),
         });
       }
-
     }
   };
 
-  const handleChange = info => {
+  const handleChange = (info) => {
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setLoading(false),
-        getBase64(info.file.originFileObj, imgUrl =>
-          setImgUrl(imgUrl),
-        );
+      setLoading(false), getBase64(info.file.originFileObj, (imgUrl) => setImgUrl(imgUrl));
     }
   };
 
-  const onPreview = async file => {
+  const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
-      src = await new Promise(resolve => {
+      src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj);
         reader.onload = () => resolve(reader.result);
@@ -215,14 +211,18 @@ const CreateProductForm = (props) => {
 
     return (
       <>
-        {(base64regex.test(imgUrl) || !imgUrl) ? (
-          <Button type="primary" onClick={handleUpload}>Upload</Button>
+        {base64regex.test(imgUrl) || !imgUrl ? (
+          <Button type="primary" onClick={handleUpload}>
+            Upload
+          </Button>
         ) : (
-            <Button type="primary" danger >Remove</Button>
-          )}
+          <Button type="primary" danger>
+            Remove
+          </Button>
+        )}
       </>
     );
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -241,7 +241,7 @@ const CreateProductForm = (props) => {
               category: values.pro_category_id,
               status: values.pro_active || false,
               description: values.pro_description,
-              inventory: values.inventory
+              inventory: values.inventory,
             }}
             scrollToFirstError
           >
@@ -330,8 +330,7 @@ const CreateProductForm = (props) => {
                 placeholder="Please select"
                 allowClear
                 treeDefaultExpandAll
-              >
-              </TreeSelect>
+              ></TreeSelect>
             </Form.Item>
 
             <Form.Item
@@ -348,12 +347,10 @@ const CreateProductForm = (props) => {
                 onEditorChange={handleEditorChange}
                 init={{
                   apiKey: '7t5oboh02n9lzhlqgoc68zmh8ibr9dg9mexgxqxt2qoj51vv',
-                  plugins: [
-                    'lists link image paste help wordcount table '
-                  ],
+                  plugins: ['lists link image paste help wordcount table '],
                   language_url: '/tinymce/langs/en_US.js',
                   language: 'en_US',
-                  min_height: 450
+                  min_height: 450,
                 }}
               />
             </Form.Item>
@@ -361,10 +358,7 @@ const CreateProductForm = (props) => {
             <Form.Item label="Image">
               <Row gutter={8} style={{ alignItems: 'center' }}>
                 <Col span={6}>
-                  <Form.Item
-                    name="avatar"
-                    noStyle
-                  >
+                  <Form.Item name="avatar" noStyle>
                     <ImgCrop rotate>
                       <Upload
                         onPreview={onPreview}
@@ -373,26 +367,26 @@ const CreateProductForm = (props) => {
                         onChange={handleChange}
                         beforeUpload={beforeUpload}
                       >
-                        {imgUrl ? <img src={imgUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                        {imgUrl ? (
+                          <img src={imgUrl} alt="avatar" style={{ width: '100%' }} />
+                        ) : (
+                          uploadButton
+                        )}
                       </Upload>
                     </ImgCrop>
                   </Form.Item>
                 </Col>
-                <Col span={18}>
-                  {buttonUpload()}
-                </Col>
+                <Col span={18}>{buttonUpload()}</Col>
               </Row>
             </Form.Item>
 
             <Form.Item name="status" valuePropName="checked" {...tailFormItemLayout}>
-              <Checkbox>
-                Publish
-              </Checkbox>
+              <Checkbox>Publish</Checkbox>
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>
               <Button type="primary" htmlType="submit">
                 Save
-          </Button>
+              </Button>
             </Form.Item>
           </Form>
         </Card>
@@ -403,12 +397,12 @@ const CreateProductForm = (props) => {
 
 CreateProductForm.propTypes = {
   values: PropTypes.object,
-  edit: PropTypes.bool
+  edit: PropTypes.bool,
 };
 
 CreateProductForm.defaultProps = {
   values: {},
-  edit: false
+  edit: false,
 };
 
 export default connect(({ category }) => ({
