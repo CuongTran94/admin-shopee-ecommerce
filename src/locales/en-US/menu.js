@@ -33,6 +33,9 @@ export default {
   'menu.list.slider': 'Slider',
   'menu.list.transaction': 'Transaction',
   'menu.list.order': 'Order',
+  'menu.list.blog': 'Blog',
+  'menu.list.blog.create': 'Create',
+  'menu.list.blog.list': 'List',
   ///
   'menu.list.table-list': 'Search Table',
   'menu.list.basic-list': 'Basic List',

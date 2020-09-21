@@ -55,6 +55,7 @@ export async function deleteProduct(params) {
 }
 
 export async function uploadAvatarProduct(file) {
+
   try {
     const uploadImg = await storage.ref(`images/${file.name}`).put(file);
     const dowloadURL = await storage.ref('images').child(file.name).getDownloadURL();

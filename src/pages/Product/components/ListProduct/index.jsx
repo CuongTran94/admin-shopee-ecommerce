@@ -5,11 +5,11 @@ import UpdateProductForm from '../UpdateForm';
 import noImage from '@/assets/no-image.png';
 import { connect } from 'umi';
 
+
 const ListProduct = (props) => {
   const [formValues, setFormValues] = useState({});
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const { dispatch, route, listProduct, loading } = props;
-
   useEffect(() => {
     dispatch({
       type: 'product/fetch',
